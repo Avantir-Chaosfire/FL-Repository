@@ -13,10 +13,10 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - GroundLayer
+  - ObjectLayer
+  - SolidWallLayer
+  - FogLayer
   - 
   - 
   - 
@@ -40,4 +40,22 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Ground
+    uniqueID: 3448688513
+    locked: 0
+  - name: Doodads
+    uniqueID: 623013687
+    locked: 0
+  - name: Characters
+    uniqueID: 3205580029
+    locked: 0
+  - name: Effects
+    uniqueID: 364975889
+    locked: 0
+  - name: Fog
+    uniqueID: 3864524489
+    locked: 0
+  - name: AboveFog
+    uniqueID: 228069183
     locked: 0

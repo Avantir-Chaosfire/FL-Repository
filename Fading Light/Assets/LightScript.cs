@@ -69,9 +69,10 @@ public class LightScript : MonoBehaviour {
 
 		if(Input.GetMouseButtonDown(0))
 		{
-			Debug.ClearDeveloperConsole();
-			Debug.Log("StartingAngle = " + angle2);
-			check ();
+		//	Debug.ClearDeveloperConsole();
+		//	Debug.Log("StartingAngle = " + angle2);
+		//	check ();
+		//	Debug.Log(LayerMask.LayerToName(DataBase.SolidWallLayer));
 		}
 
 		debugLines ();
@@ -88,11 +89,12 @@ public class LightScript : MonoBehaviour {
 		//draw a ray toward the angles and all corners withing the angles
 		rayHits.Clear();//clear previous frame's rayHits
 
+
 		Vector2 directionStart = convertToPoint(angleStart);
 		Vector2 directionEnd = convertToPoint(angleEnd);
 
-		RaycastHit2D a = Physics2D.Raycast(origin, directionStart, distance);
-		RaycastHit2D b = Physics2D.Raycast(origin, directionEnd, distance);
+		RaycastHit2D a = Physics2D.Raycast(origin, directionStart, distance, (1 << LayerMask.NameToLayer("SolidWallLayer")));
+		RaycastHit2D b = Physics2D.Raycast(origin, directionEnd, distance, (1 << LayerMask.NameToLayer("SolidWallLayer")));
 		a.centroid = origin;
 		b.centroid = origin;
 		if(!a.collider) a.point = (directionStart.normalized*distance) + origin;
@@ -107,7 +109,7 @@ public class LightScript : MonoBehaviour {
 		{
 			Vector2 hurdur = convertToPoint(newAngle);
 			
-			RaycastHit2D derp = Physics2D.Raycast(origin, hurdur, distance);
+			RaycastHit2D derp = Physics2D.Raycast(origin, hurdur, distance, (1 << LayerMask.NameToLayer("SolidWallLayer")));
 			derp.centroid = origin;
 			if(!derp.collider) derp.point = (hurdur.normalized*distance) + origin;
 			rayHits.Add(derp);
@@ -129,8 +131,8 @@ public class LightScript : MonoBehaviour {
 					//cast 2 rays offset by 0.0001f so the ray will keep going if it hits a corner
 					Vector2 offSet1 = convertToPoint(dirAngle + 0.01f);
 					Vector2 offSet2 = convertToPoint(dirAngle - 0.01f);
-					RaycastHit2D c = Physics2D.Raycast(origin, offSet1, distance);
-					RaycastHit2D d = Physics2D.Raycast(origin, offSet2, distance);
+					RaycastHit2D c = Physics2D.Raycast(origin, offSet1, distance, (1 << LayerMask.NameToLayer("SolidWallLayer")));
+					RaycastHit2D d = Physics2D.Raycast(origin, offSet2, distance, (1 << LayerMask.NameToLayer("SolidWallLayer")));
 					c.centroid = origin;
 					d.centroid = origin;
 
@@ -142,7 +144,7 @@ public class LightScript : MonoBehaviour {
 					//if both offsets hit, just use one ray(reduce triangles)
 					else if(c.collider == d.collider)
 					{
-						RaycastHit2D e = Physics2D.Raycast(origin, direction, distance);
+						RaycastHit2D e = Physics2D.Raycast(origin, direction, distance, (1 << LayerMask.NameToLayer("SolidWallLayer")));
 						e.centroid = origin;
 						rayHits.Add (e);
 					}
@@ -252,18 +254,6 @@ public class LightScript : MonoBehaviour {
 		Array.Sort(hits, sort);
 	}
 
-	//shitty hack to fix a shitty bug that should not be happening
-	void afterSortCheck(RaycastHit2D[] hits, float angleStart)
-	{
-		if(calcAngle(hits[hits.Length-1]) < angleStart + 0.01f && calcAngle(hits[hits.Length-1]) > angleStart - 0.01f )
-		{
-			Debug.Log("IT HAPPENED !!!!");
-			RaycastHit2D temp = hits[hits.Length-1];
-			Array.Copy(hits, 0, hits, 1, hits.Length - 1);
-			hits[hits.Length-1] = temp;
-		}
-	}
-
 	///////////////////////DEBUGGING FUNCTIONS///////////////////////////////
 	/////////////////////////////////////////////////////////////////////////
 
@@ -312,8 +302,8 @@ public class LightScript : MonoBehaviour {
 			else
 				Debug.DrawRay(rayHitsArray[n].centroid, direction, Color.white);
 
-			GameObject test = Instantiate (prefab);
-			test.transform.position = rayHitsArray[n].point;
+			//GameObject test = Instantiate (prefab);
+			//test.transform.position = rayHitsArray[n].point;
 		}
 	}
 	/////////////////////////////////////////////////////////////////////////
