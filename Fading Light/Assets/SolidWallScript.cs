@@ -13,7 +13,7 @@ public class SolidWallScript : MonoBehaviour {
 		gameObject.AddComponent(typeof(MeshRenderer));
 		MeshFilter filter = gameObject.AddComponent(typeof(MeshFilter)) as MeshFilter;
 		filter.mesh = createMesh(col.points);
-		gameObject.layer = 10;//(SolidWallLayer)
+		gameObject.layer = LayerMask.NameToLayer("SolidWallLayer");//(SolidWallLayer)
 	}
 	
 	// Update is called once per frame

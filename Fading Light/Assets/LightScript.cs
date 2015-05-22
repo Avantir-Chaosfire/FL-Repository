@@ -25,11 +25,13 @@ public class LightScript : MonoBehaviour {
 		MeshFilter filter = light.AddComponent(typeof(MeshFilter)) as MeshFilter;
 		MeshRenderer r = light.GetComponent<MeshRenderer>();
 		r.material.color = Color.white;
+		Shader s = Shader.Find ("Custom/LightShader");
+		r.material.shader = s;
 
-		coneWidth = (coneWidthMax - coneWidthMin) / 2;
+		coneWidth = 50f;
 		coneWidthMax = 220f;
 		coneWidthMin = 50f;
-		coneDistance = (coneDistanceMax - coneDistanceMin) / 2;
+		coneDistance = 10f;
 		coneDistanceMax = 10f;
 		coneDistanceMin = 4f;
 		percentPerScroll = 0.25f;
