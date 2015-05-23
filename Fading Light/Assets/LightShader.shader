@@ -1,21 +1,20 @@
-﻿Shader "Custom/LightShader" {
+﻿//(make sure this shader's z is > then that of fogShader so it stays infront of fogShader)
+//this shader uses alpha blending
+Shader "Custom/LightShader" {
 	Properties {
-		_Color ("Color", Color) = (1,1,1,1)
-		_MainTex ("Albedo (RGB)", 2D) = "white" {}
-		_Glossiness ("Smoothness", Range(0,1)) = 0.0
-		_Metallic ("Metallic", Range(0,1)) = 0.0
+		_Alpha ("Alpha", float) = 0//invis
+		_Color ("Color", Color) = (1,1,1,1)//black
 	}
 	SubShader {
-         Tags { "Queue" = "Transparent" }
-         Pass
-          {
-              Blend Zero One
-              Lighting On
-              ZWrite On
-              Material
-              {
-                  Diffuse (0,0,0,0)
-              }
-          }
+         Tags { 
+         	//draw this shader right before drawing fogShader
+         	"Queue" = "Overlay-1"}
+         Zwrite On
+         //draw over everything
+         Ztest Always  
+      	 Pass {
+      	 	 Color[_Color]
+      	 	 Blend SrcAlpha OneMinusSrcAlpha
+      	 }
      } 
 }

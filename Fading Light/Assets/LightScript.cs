@@ -8,89 +8,70 @@ public class LightScript : MonoBehaviour {
 
 	private List<RaycastHit2D> rayHits;
 	private RaycastHit2D[] rayHitsArray;
-	public GameObject light;
-	public GameObject prefab;//used for debugging
+
 	public float coneWidth;
-	public float coneWidthMax;
-	public float coneWidthMin;
 	public float coneDistance;
-	public float coneDistanceMax;
-	public float coneDistanceMin;
-	public float percentPerScroll;
+	public float angle;
+
+	private MeshRenderer renderer;
+	private MeshFilter filter;
+
 	// Use this for initialization
 	void Start () {
+		transform.position = new Vector3 (transform.position.x,transform.position.y,-1f);
 		rayHits = new List<RaycastHit2D> ();
 
-		light.AddComponent(typeof(MeshRenderer));
-		MeshFilter filter = light.AddComponent(typeof(MeshFilter)) as MeshFilter;
-		MeshRenderer r = light.GetComponent<MeshRenderer>();
-		r.material.color = Color.white;
-		Shader s = Shader.Find ("Custom/LightShader");
-		r.material.shader = s;
+		renderer = gameObject.AddComponent(typeof(MeshRenderer)) as MeshRenderer;
+		filter = gameObject.AddComponent(typeof(MeshFilter)) as MeshFilter;
+		renderer.material.shader = Shader.Find ("Custom/LightShader");
+		renderer.material.color = new Color(1f,1f,1f,0.05f);//or whatever color the light is
 
-		coneWidth = 50f;
-		coneWidthMax = 220f;
-		coneWidthMin = 50f;
-		coneDistance = 10f;
-		coneDistanceMax = 10f;
-		coneDistanceMin = 4f;
-		percentPerScroll = 0.25f;
+		coneWidth = 359f;
+		coneDistance = 4f;
+		angle = 0f;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetAxis("Mouse ScrollWheel") < 0) // backwards
+		castRays(transform.position, angle, coneDistance);
+		drawLight(rayHitsArray);
+	}
+
+	void drawLight(RaycastHit2D[] rayHitsArray)
+	{
+		if(coneWidth >= 359f)
 		{
-			coneDistance -= percentPerScroll*(coneDistanceMax-coneDistanceMin);
-			coneWidth += percentPerScroll*(coneWidthMax-coneWidthMin);
-			if(coneWidth > coneWidthMax) coneWidth = coneWidthMax;
-			if(coneDistance < coneDistanceMin) coneDistance = coneDistanceMin;
+			Vector2[] thePoints = new Vector2[rayHitsArray.Length];
+			for(int n = 0; n < rayHitsArray.Length; n ++)
+			{
+				thePoints[n] = rayHitsArray[n].point;
+			}
+			toLocalSpace(thePoints);
+			filter.mesh = createMesh(thePoints);
 		}
-		if(Input.GetAxis("Mouse ScrollWheel") > 0) // forwards
+		else
 		{
-			coneDistance += percentPerScroll*(coneDistanceMax-coneDistanceMin);
-			coneWidth -= percentPerScroll*(coneWidthMax-coneWidthMin);
-			if(coneWidth < coneWidthMin) coneWidth = coneWidthMin;
-			if(coneDistance > coneDistanceMax) coneDistance = coneDistanceMax;
+			Vector2[] thePoints = new Vector2[rayHitsArray.Length+1];
+			thePoints[0] = transform.position;
+			for(int n = 1; n < rayHitsArray.Length+1; n ++)
+			{
+				thePoints[n] = rayHitsArray[n-1].point;
+			}
+			toLocalSpace(thePoints);
+			filter.mesh = createMesh(thePoints);
+			//set rotation to 0 to fix
 		}
-
-		light.transform.position = transform.position;
-		float angle1 = normalizeAngle (transform.rotation.eulerAngles.z - coneWidth/2);
-		float angle2 = normalizeAngle (transform.rotation.eulerAngles.z + coneWidth/2);
-
-		rayHitsArray = drawRays(transform.position, angle1, angle2, coneDistance);
-		sortRayHits (rayHitsArray, angle2+0.01f);
-		//afterSortCheck(rayHitsArray, angle2); doesnt work :(
-
-		Vector2[] thePoints = new Vector2[rayHitsArray.Length+1];
-		thePoints[0] = light.transform.position;
-		for(int n = 1; n < rayHitsArray.Length+1; n ++)
-		{
-			thePoints[n] = rayHitsArray[n-1].point;
-		}
-
-		if(Input.GetMouseButtonDown(0))
-		{
-		//	Debug.ClearDeveloperConsole();
-		//	Debug.Log("StartingAngle = " + angle2);
-		//	check ();
-		//	Debug.Log(LayerMask.LayerToName(DataBase.SolidWallLayer));
-		}
-
-		debugLines ();
-		toLocalSpace(thePoints, light.transform.position);
-		MeshFilter filter = light.GetComponent<MeshFilter> ();
-		filter.mesh.Clear ();
-		filter.mesh = createMesh (thePoints);
 	}
 
 	//angles goes COUNTER-CLOCKWISE from start to end, angles should be normalized before using
-	RaycastHit2D[] drawRays(Vector2 origin, float angleStart, float angleEnd, float distance)
+	void castRays(Vector2 origin, float angle, float distance)
 	{
 		//get all polygonCollider2d corners on screen (stored in DataBase)
 		//draw a ray toward the angles and all corners withing the angles
 		rayHits.Clear();//clear previous frame's rayHits
 
+		float angleStart = normalizeAngle (angle - coneWidth/2);
+		float angleEnd = normalizeAngle (angle + coneWidth/2);
 
 		Vector2 directionStart = convertToPoint(angleStart);
 		Vector2 directionEnd = convertToPoint(angleEnd);
@@ -163,7 +144,8 @@ public class LightScript : MonoBehaviour {
 				}
 			}
 		}
-		return rayHits.ToArray();
+		rayHitsArray = rayHits.ToArray();
+		sortRayHits(rayHitsArray, angleEnd+0.01f);
 	}
 
 	///////////////////////CALCULATION FUNCTIONS/////////////////////////////
@@ -208,11 +190,11 @@ public class LightScript : MonoBehaviour {
 	}
 	
 	//converts an array or world points to local point centered around origin
-	void toLocalSpace(Vector2[] worldPoints, Vector2 origin)
+	void toLocalSpace(Vector2[] worldPoints)
 	{
 		for(int n = 0; n < worldPoints.Length; n++)
 		{
-			worldPoints[n] = worldPoints[n] - origin;
+			worldPoints[n] = worldPoints[n] - (Vector2)transform.position;
 		}
 	}
 	
@@ -303,9 +285,6 @@ public class LightScript : MonoBehaviour {
 				Debug.DrawRay(rayHitsArray[n].centroid, direction, Color.yellow);
 			else
 				Debug.DrawRay(rayHitsArray[n].centroid, direction, Color.white);
-
-			//GameObject test = Instantiate (prefab);
-			//test.transform.position = rayHitsArray[n].point;
 		}
 	}
 	/////////////////////////////////////////////////////////////////////////

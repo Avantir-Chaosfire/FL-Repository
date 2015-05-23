@@ -6,19 +6,18 @@ public class FogScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		// Set up game object with mesh;
-		gameObject.layer = LayerMask.NameToLayer("FogLayer");
 		gameObject.AddComponent(typeof(MeshRenderer));
 		MeshFilter filter = gameObject.AddComponent(typeof(MeshFilter)) as MeshFilter;
 		MeshRenderer r = GetComponent<MeshRenderer>();
 		r.material.shader = Shader.Find ("Custom/FogShader");
-		r.material.SetTexture("_MainTex", (Texture)Resources.Load("black"));
+		r.material.color = Color.black;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		drawFog ();
 		transform.position = new Vector3 (Camera.main.transform.position.x,
-		                                  Camera.main.transform.position.y, transform.position.z);
+		                                  Camera.main.transform.position.y, DataBase.fogZ);
 	}
 
 	//fog is just a rectangle mesh that covers up to what the main camera displays

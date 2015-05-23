@@ -13,11 +13,11 @@ TagManager:
   - UI
   - 
   - 
-  - GroundLayer
-  - ObjectLayer
+  - 
+  - 
+  - 
   - SolidWallLayer
-  - FogLayer
-  - LightLayer
+  - 
   - 
   - 
   - 
@@ -53,9 +53,6 @@ TagManager:
   - name: Effects
     uniqueID: 364975889
     locked: 0
-  - name: Fog
-    uniqueID: 3864524489
-    locked: 0
-  - name: AboveFog
-    uniqueID: 228069183
+  - name: Overhead
+    uniqueID: 3395584959
     locked: 0

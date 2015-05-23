@@ -1,11 +1,15 @@
-﻿Shader "Custom/FogShader" {
-	Properties {
-		_MainTex ("Albedo (RGB)", 2D) = "white" {}
-    }
-    SubShader {
-        Tags { "Queue" = "Overlay" }
-        Pass {
-            SetTexture [_MainTex] { combine texture }
-        }
-    }
+﻿//this shader just colors the entire thing black
+Shader "Custom/FogShader" {
+	SubShader {
+		Tags { 
+			//draw this shader last
+			"Queue" = "Overlay" 
+		}
+		Zwrite On
+		//if this shader is infront of other pixels, draw overthem
+		Ztest LEqual
+		Pass {
+			Color (0,0,0,1)
+		} 
+	}
 }
