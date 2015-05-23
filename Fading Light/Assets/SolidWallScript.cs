@@ -9,17 +9,14 @@ public class SolidWallScript : MonoBehaviour {
 	void Start () {
 		col = GetComponent<PolygonCollider2D>();
 
-		Rigidbody2D body = gameObject.AddComponent<Rigidbody2D> ();
+		// Set up game object with mesh;
+		Rigidbody2D body = gameObject.AddComponent<Rigidbody2D>();
 		body.isKinematic = true;
-		// Set up game object with mesh; if no sprite renderer
-		if (gameObject.GetComponent<SpriteRenderer> () == null) {
-
-			gameObject.AddComponent (typeof(MeshRenderer));
-			MeshFilter filter = gameObject.AddComponent (typeof(MeshFilter)) as MeshFilter;
-			filter.mesh = createMesh (col.points);
-			gameObject.layer = LayerMask.NameToLayer ("SolidWallLayer");//(SolidWallLayer)
-			MeshRenderer r = GetComponent<MeshRenderer> ();
-		}
+		gameObject.AddComponent(typeof(MeshRenderer));
+		MeshFilter filter = gameObject.AddComponent(typeof(MeshFilter)) as MeshFilter;
+		filter.mesh = createMesh(col.points);
+		gameObject.layer = LayerMask.NameToLayer("SolidWallLayer");//(SolidWallLayer)
+		MeshRenderer r = GetComponent<MeshRenderer> ();
 
 		transform.position = new Vector3(transform.position.x, transform.position.y, DataBase.solidWallZ);
 	}

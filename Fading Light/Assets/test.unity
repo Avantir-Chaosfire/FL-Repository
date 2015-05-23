@@ -179,7 +179,7 @@ SpriteRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 190756036}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_Materials:
@@ -677,9 +677,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1011969965}
   - 212: {fileID: 1011969964}
-  - 60: {fileID: 1011969966}
-  - 114: {fileID: 1011969967}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Tree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -725,38 +723,6 @@ Transform:
   - {fileID: 190756037}
   m_Father: {fileID: 0}
   m_RootOrder: 14
---- !u!60 &1011969966
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1011969963}
-  m_Enabled: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  m_Points:
-    m_Paths:
-    - - {x: -.118936658, y: -.682424545}
-      - {x: .406241357, y: -.467066526}
-      - {x: .598648131, y: -.000195503235}
-      - {x: .440169513, y: .568115473}
-      - {x: -.0322665572, y: .761914134}
-      - {x: -.539244056, y: .664292097}
-      - {x: -.815397322, y: .177395582}
-      - {x: -.669290841, y: -.438749075}
---- !u!114 &1011969967
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1011969963}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9804813589e3174899db23c77a02f81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1035381557
 GameObject:
   m_ObjectHideFlags: 0
@@ -922,7 +888,7 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 10754, guid: 0000000000000000e000000000000000, type: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
