@@ -16,7 +16,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - SolidWallLayer
   - 
   - 
   - 
@@ -40,4 +40,19 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Ground
+    uniqueID: 3448688513
+    locked: 0
+  - name: Doodads
+    uniqueID: 623013687
+    locked: 0
+  - name: Characters
+    uniqueID: 3205580029
+    locked: 0
+  - name: Effects
+    uniqueID: 364975889
+    locked: 0
+  - name: Overhead
+    uniqueID: 3395584959
     locked: 0

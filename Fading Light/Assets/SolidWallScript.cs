@@ -8,6 +8,17 @@ public class SolidWallScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		col = GetComponent<PolygonCollider2D>();
+
+		// Set up game object with mesh;
+		Rigidbody2D body = gameObject.AddComponent<Rigidbody2D>();
+		body.isKinematic = true;
+		gameObject.AddComponent(typeof(MeshRenderer));
+		MeshFilter filter = gameObject.AddComponent(typeof(MeshFilter)) as MeshFilter;
+		filter.mesh = createMesh(col.points);
+		gameObject.layer = LayerMask.NameToLayer("SolidWallLayer");//(SolidWallLayer)
+		MeshRenderer r = GetComponent<MeshRenderer> ();
+
+		transform.position = new Vector3(transform.position.x, transform.position.y, DataBase.solidWallZ);
 	}
 	
 	// Update is called once per frame
@@ -25,6 +36,29 @@ public class SolidWallScript : MonoBehaviour {
 	void OnBecameVisible() {
 
 		DataBase.corners.Add(col);
+	}
+
+	Mesh createMesh(Vector2[] points)
+	{
+		Triangulator t = new Triangulator (points);
+
+		// Use the triangulator to get indices for creating triangles
+		int[] indices = t.Triangulate();
+
+		// Create the Vector3 vertices
+		Vector3[] vertices = new Vector3[points.Length];
+		for (int i=0; i<vertices.Length; i++) {
+			vertices[i] = new Vector3(points[i].x, points[i].y, 0);
+		}
+
+		// Create the mesh
+		Mesh msh = new Mesh();
+		msh.vertices = vertices;
+		msh.triangles = indices;
+		msh.RecalculateNormals();
+		msh.RecalculateBounds();
+
+		return msh;
 	}
 
 }
