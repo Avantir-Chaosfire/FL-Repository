@@ -24,11 +24,13 @@ public class LightScript : MonoBehaviour {
 		renderer = gameObject.AddComponent(typeof(MeshRenderer)) as MeshRenderer;
 		filter = gameObject.AddComponent(typeof(MeshFilter)) as MeshFilter;
 		renderer.material.shader = Shader.Find ("Custom/LightShader");
-		renderer.material.color = new Color(1f,1f,1f,0.05f);//or whatever color the light is
+		renderer.material.color = new Color(1f,1f,1f,0.25f);//or whatever color the light is
 
 		coneWidth = 359f;
 		coneDistance = 4f;
 		angle = 0f;
+
+		renderer.sortingLayerName = "Light";// and .sortingOrder = blah;
 	}
 	
 	// Update is called once per frame

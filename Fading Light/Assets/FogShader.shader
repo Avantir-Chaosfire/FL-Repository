@@ -9,7 +9,7 @@ Shader "Custom/FogShader" {
 		//if this shader is infront of other pixels, draw overthem
 		Ztest LEqual
 		Pass {
-			Color (0,0,0,1)
+			Color (0.1,0.1,0.1,1)
 		} 
 	}
 }

@@ -73,12 +73,14 @@ public class ConeLightSourceScript : MonoBehaviour {
 
 	void updateLightVariables()
 	{
-		for(int n = 0; n < numberOfLights; n ++)
+		for(int n = 0; n < numberOfLights-1; n ++)
 		{
 			emits[n].GetComponent<LightScript>().angle = transform.rotation.eulerAngles.z;
 			emits[n].GetComponent<LightScript>().coneWidth = coneWidth;
 			emits[n].GetComponent<LightScript>().coneDistance = coneDistance;
 		}
+		emits[numberOfLights-1].GetComponent<LightScript>().coneWidth = 359f;
+		emits[numberOfLights-1].GetComponent<LightScript>().coneDistance = 1f;
 	}
 
 	void mouseScroll()

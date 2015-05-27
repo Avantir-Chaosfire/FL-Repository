@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FogScript : MonoBehaviour {
+public class Final : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -9,9 +9,9 @@ public class FogScript : MonoBehaviour {
 		gameObject.AddComponent(typeof(MeshRenderer));
 		MeshFilter filter = gameObject.AddComponent(typeof(MeshFilter)) as MeshFilter;
 		MeshRenderer r = GetComponent<MeshRenderer>();
-		r.material.shader = Shader.Find ("Custom/FogShader");
+		r.material.shader = Shader.Find ("Custom/FinalPass");
 		r.material.color = Color.black;
-
+		
 		r.sortingLayerName = "Fog";// and .sortingOrder = blah;
 		//r.sortingOrder = 1;
 	}
@@ -22,7 +22,7 @@ public class FogScript : MonoBehaviour {
 		transform.position = new Vector3 (Camera.main.transform.position.x,
 		                                  Camera.main.transform.position.y, DataBase.fogZ);
 	}
-
+	
 	//fog is just a rectangle mesh that covers up to what the main camera displays
 	void drawFog()
 	{
