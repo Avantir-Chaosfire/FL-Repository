@@ -53,6 +53,12 @@ TagManager:
   - name: Effects
     uniqueID: 364975889
     locked: 0
+  - name: Light
+    uniqueID: 3418822007
+    locked: 0
+  - name: Fog
+    uniqueID: 3164126405
+    locked: 0
   - name: Overhead
     uniqueID: 3395584959
     locked: 0
