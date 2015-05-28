@@ -3,7 +3,6 @@ using System.Collections;
 
 public class CameraScript : MonoBehaviour {
 
-
 	public Transform t;
 	// Use this for initialization
 	void Start () {
