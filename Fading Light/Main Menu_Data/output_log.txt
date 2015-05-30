@@ -1,0 +1,115 @@
+Initialize engine version: 5.0.1f1 (5a2e8fe35a68)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: AMD Radeon R9 200 Series (ID=0x6810)
+    Vendor:   ATI
+    VRAM:     2030 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: E:\Unity\FL-Repository\Fading Light\Main Menu_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading E:\Unity\FL-Repository\Fading Light\Main Menu_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: E:\Unity\FL-Repository\Fading Light\Main Menu_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading E:\Unity\FL-Repository\Fading Light\Main Menu_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: E:\Unity\FL-Repository\Fading Light\Main Menu_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading E:\Unity\FL-Repository\Fading Light\Main Menu_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: E:\Unity\FL-Repository\Fading Light\Main Menu_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading E:\Unity\FL-Repository\Fading Light\Main Menu_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+- Completed reload, in  0.037 seconds
+desktop: 1280x1024 60Hz; virtual: 1280x1024 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+Platform assembly: E:\Unity\FL-Repository\Fading Light\Main Menu_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: E:\Unity\FL-Repository\Fading Light\Main Menu_Data\Managed\System.dll (this message is harmless)
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1713)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 3.172340 ms
+
+Unloading 3 unused Assets to reduce memory usage. Loaded Objects now: 303.
+Total: 0.139848 ms (FindLiveObjects: 0.015798 ms CreateObjectMapping: 0.013458 ms MarkObjects: 0.107373 ms  DeleteObjects: 0.002925 ms)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1713)
+
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.268872 ms
+
+Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 326.
+Total: 0.177297 ms (FindLiveObjects: 0.033938 ms CreateObjectMapping: 0.012287 ms MarkObjects: 0.127560 ms  DeleteObjects: 0.003218 ms)
+
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.353425 ms
+
+Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 303.
+Total: 0.133412 ms (FindLiveObjects: 0.011117 ms CreateObjectMapping: 0.012287 ms MarkObjects: 0.107080 ms  DeleteObjects: 0.002925 ms)
+
+Level '' (5) couldn't be loaded because it has not been added to the build settings.
+To add a level to the build settings use the menu File->Build Settings...
+ 
+(Filename:  Line: 272)
+
+Level '' (5) couldn't be loaded because it has not been added to the build settings.
+To add a level to the build settings use the menu File->Build Settings...
+ 
+(Filename:  Line: 272)
+
+Level '' (5) couldn't be loaded because it has not been added to the build settings.
+To add a level to the build settings use the menu File->Build Settings...
+ 
+(Filename:  Line: 272)
+
+Level '' (5) couldn't be loaded because it has not been added to the build settings.
+To add a level to the build settings use the menu File->Build Settings...
+ 
+(Filename:  Line: 272)
+
+Level '' (5) couldn't be loaded because it has not been added to the build settings.
+To add a level to the build settings use the menu File->Build Settings...
+ 
+(Filename:  Line: 272)
+
+Level '' (5) couldn't be loaded because it has not been added to the build settings.
+To add a level to the build settings use the menu File->Build Settings...
+ 
+(Filename:  Line: 272)
+
+Level '' (5) couldn't be loaded because it has not been added to the build settings.
+To add a level to the build settings use the menu File->Build Settings...
+ 
+(Filename:  Line: 272)
+
+Level '' (5) couldn't be loaded because it has not been added to the build settings.
+To add a level to the build settings use the menu File->Build Settings...
+ 
+(Filename:  Line: 272)
+
+Level '' (5) couldn't be loaded because it has not been added to the build settings.
+To add a level to the build settings use the menu File->Build Settings...
+ 
+(Filename:  Line: 272)
+
+Level '' (5) couldn't be loaded because it has not been added to the build settings.
+To add a level to the build settings use the menu File->Build Settings...
+ 
+(Filename:  Line: 272)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1713)
+
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.326508 ms
+
+Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 326.
+Total: 0.179345 ms (FindLiveObjects: 0.037449 ms CreateObjectMapping: 0.011995 ms MarkObjects: 0.126682 ms  DeleteObjects: 0.002925 ms)
+
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.287596 ms
+
+Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 307.
+Total: 0.137508 ms (FindLiveObjects: 0.012287 ms CreateObjectMapping: 0.012287 ms MarkObjects: 0.109713 ms  DeleteObjects: 0.002925 ms)
+
