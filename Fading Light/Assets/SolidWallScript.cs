@@ -8,17 +8,18 @@ public class SolidWallScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		col = GetComponent<PolygonCollider2D>();
-
+		SpriteRenderer renderer = GetComponent<SpriteRenderer> ();
 		// Set up game object with mesh;
-		Rigidbody2D body = gameObject.AddComponent<Rigidbody2D>();
-		body.isKinematic = true;
-		gameObject.AddComponent(typeof(MeshRenderer));
-		MeshFilter filter = gameObject.AddComponent(typeof(MeshFilter)) as MeshFilter;
-		filter.mesh = createMesh(col.points);
+		//Rigidbody2D body = gameObject.AddComponent<Rigidbody2D>();
+		//body.isKinematic = true;
+		//gameObject.AddComponent(typeof(MeshRenderer));
+		//MeshFilter filter = gameObject.AddComponent(typeof(MeshFilter)) as MeshFilter;
+		//filter.mesh = createMesh(col.points);
 		gameObject.layer = LayerMask.NameToLayer("SolidWallLayer");//(SolidWallLayer)
-		MeshRenderer r = GetComponent<MeshRenderer> ();
+		renderer.sortingLayerName = "Overhead";// and .sortingOrder = blah;
+		//MeshRenderer r = GetComponent<MeshRenderer> ();
 
-		transform.position = new Vector3(transform.position.x, transform.position.y, DataBase.solidWallZ);
+		transform.position = new Vector3(transform.position.x, transform.position.y, DataBase.objectZ);
 	}
 	
 	// Update is called once per frame
@@ -38,6 +39,7 @@ public class SolidWallScript : MonoBehaviour {
 		DataBase.corners.Add(col);
 	}
 
+	//DEBUGGGING purposes//
 	Mesh createMesh(Vector2[] points)
 	{
 		Triangulator t = new Triangulator (points);

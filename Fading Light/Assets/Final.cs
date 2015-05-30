@@ -5,15 +5,13 @@ public class Final : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
 		// Set up game object with mesh;
-		gameObject.AddComponent(typeof(MeshRenderer));
-		MeshFilter filter = gameObject.AddComponent(typeof(MeshFilter)) as MeshFilter;
-		MeshRenderer r = GetComponent<MeshRenderer>();
-		r.material.shader = Shader.Find ("Custom/FinalPass");
-		r.material.color = Color.black;
-		
-		r.sortingLayerName = "Fog";// and .sortingOrder = blah;
-		//r.sortingOrder = 1;
+		MeshRenderer renderer = gameObject.AddComponent<MeshRenderer>();
+		MeshFilter filter = gameObject.AddComponent<MeshFilter>();
+		renderer.material.shader = Shader.Find ("Custom/FinalPass");
+		renderer.material.color = DataBase.fogColor;
+		renderer.sortingLayerName = "Fog";
 	}
 	
 	// Update is called once per frame
@@ -26,15 +24,23 @@ public class Final : MonoBehaviour {
 	//fog is just a rectangle mesh that covers up to what the main camera displays
 	void drawFog()
 	{
+		Camera c = Camera.main;
 		Vector2[] corners = new Vector2[4];
-		corners[0] = new Vector2(Screen.width / 2.0f / Camera.main.orthographicSize/-2, Screen.height / 2.0f / Camera.main.orthographicSize/2);
-		corners[1] = new Vector2(Screen.width / 2.0f / Camera.main.orthographicSize/2, Screen.height / 2.0f / Camera.main.orthographicSize/2);
-		corners[2] = new Vector2(Screen.width / 2.0f / Camera.main.orthographicSize/2, Screen.height / 2.0f / Camera.main.orthographicSize/-2);
-		corners[3] = new Vector2(Screen.width / 2.0f / Camera.main.orthographicSize/-2, Screen.height / 2.0f / Camera.main.orthographicSize/-2);
+		corners[0] = worldToLocal(c.ScreenToWorldPoint(new Vector2(0, c.pixelHeight)));
+		corners[1] = worldToLocal(c.ScreenToWorldPoint(new Vector2(c.pixelWidth, c.pixelHeight)));
+		corners[2] = worldToLocal(c.ScreenToWorldPoint(new Vector2(c.pixelWidth, 0)));
+		corners[3] = worldToLocal(c.ScreenToWorldPoint(new Vector2(0, 0)));
 		MeshFilter filter = GetComponent<MeshFilter> ();
 		filter.mesh = createMesh(corners);
 	}
-	
+
+	//using camera.main as the local point
+	Vector2 worldToLocal(Vector2 world)
+	{
+		return new Vector2(world.x - Camera.main.transform.position.x,
+		                   world.y - Camera.main.transform.position.y);
+	}
+
 	Mesh createMesh(Vector2[] points)
 	{
 		Triangulator t = new Triangulator (points);

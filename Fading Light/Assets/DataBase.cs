@@ -11,5 +11,8 @@ public class DataBase {
 	public static float fogZ = 2f;
 	public static float lightZ = 1f;//lightZ must be smaller then fogZ AND bigger then objectZ(duno why for second one)
 	public static float objectZ = 0f;
-	public static float solidWallZ = 0;//will appear on top of fog. (when you want it to be hidden by fog, move it down to objectZ)//change sorting layer
+
+	//currently, the only value that matters in lightColor is its alpha value
+	public static Color fogColor = Color.black;
+	public static Color lightColor = new Color(1f,1f,1f,0.2f);
 }

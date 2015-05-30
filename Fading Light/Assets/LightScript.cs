@@ -21,16 +21,15 @@ public class LightScript : MonoBehaviour {
 		transform.position = new Vector3 (transform.position.x,transform.position.y,-1f);
 		rayHits = new List<RaycastHit2D> ();
 
-		renderer = gameObject.AddComponent(typeof(MeshRenderer)) as MeshRenderer;
-		filter = gameObject.AddComponent(typeof(MeshFilter)) as MeshFilter;
+		renderer = gameObject.AddComponent<MeshRenderer>();
+		filter = gameObject.AddComponent<MeshFilter>();
 		renderer.material.shader = Shader.Find ("Custom/LightShader");
-		renderer.material.color = new Color(1f,1f,1f,0.25f);//or whatever color the light is
+		renderer.material.color = DataBase.lightColor;
+		renderer.sortingLayerName = "Light";
 
 		coneWidth = 359f;
 		coneDistance = 4f;
 		angle = 0f;
-
-		renderer.sortingLayerName = "Light";// and .sortingOrder = blah;
 	}
 	
 	// Update is called once per frame
