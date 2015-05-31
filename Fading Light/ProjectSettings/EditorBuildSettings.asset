@@ -15,3 +15,5 @@ EditorBuildSettings:
     path: Assets/Menu Scenes/Options Menu.unity
   - enabled: 1
     path: Assets/Menu Scenes/Confirm Exit Menu.unity
+  - enabled: 1
+    path: Assets/Lighting Test Scene/Lighting Test.unity
