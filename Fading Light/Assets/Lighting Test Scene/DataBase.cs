@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class DataBase {
 
 	//a list of the colliders of solid wall objects that is currently visible on camera
-	public static List<PolygonCollider2D> corners = new List<PolygonCollider2D>();
+	public static List<Vector2[]> corners = new List<Vector2[]>();
 
 	public static float cameraZ = -10f;
 	public static float fogZ = 2f;
@@ -14,5 +14,9 @@ public class DataBase {
 
 	//currently, the only value that matters in lightColor is its alpha value
 	public static Color fogColor = Color.black;
-	public static Color lightColor = new Color(1f,1f,1f,0.2f);
+	public static Color getLightColor(int numOfLights)
+	{
+		float alpha = 1f / (numOfLights - 0.9f);
+		return new Color(1f,1f,1f,alpha);
+	}
 }

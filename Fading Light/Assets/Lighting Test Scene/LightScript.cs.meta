@@ -1,10 +1,11 @@
 fileFormatVersion: 2
 guid: c83be8f0399a25546afadd57a3ef1e0f
-timeCreated: 1433030845
+timeCreated: 1435368190
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - deb: {fileID: 157166, guid: ca9104369c78be344991bb0fc6fa8084, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -16,14 +16,4 @@ public class ControllerScript : MonoBehaviour {
 		//testing sccessful, SolidWallScript correctly does what its suppose to do (scene view camera must also not be on collider)
 	}
 
-	void debug()
-	{
-		for(int n = 0; n < DataBase.corners.Count; n ++)
-		{
-			for(int i = 0; i < DataBase.corners[n].points.Length; i ++)
-			{
-				Debug.Log(DataBase.corners[n].points[i].x + "," + DataBase.corners[n].points[i].y);
-			}
-		}
-	}
 }

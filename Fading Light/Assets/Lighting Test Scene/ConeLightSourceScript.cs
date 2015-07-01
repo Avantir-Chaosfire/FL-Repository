@@ -11,76 +11,56 @@ public class ConeLightSourceScript : MonoBehaviour {
 	public float coneDistanceMin;
 	public float percentPerScroll;
 
-	private Vector3[] Points;
-	private int numberOfLights = 5;//number of lights this light source emits
+	public int numberOfLights = 5;//number of lights this light source emits
 	private GameObject[] emits;
-	public GameObject light1;
-	public GameObject light2;
-	public GameObject light3;
-	public GameObject light4;
-	public GameObject light5;
+	private float radius = 0.2f;
 	// Use this for initialization
 	void Start () {
 		percentPerScroll = 0.1f;
 		coneWidth = 359f;
 		coneWidthMax = 359f;
 		coneWidthMin = 60f;
-		coneDistance = 4f;
-		coneDistanceMax = 11f;
-		coneDistanceMin = 4f;
+		coneDistance = 7f;
+		coneDistanceMax = 13f;
+		coneDistanceMin = 7f;
 
-		Points = new Vector3[numberOfLights];
-		Points[0] = new Vector3(0.2f,0.2f,DataBase.lightZ);
-		Points[1] = new Vector3(0.2f,-0.2f,DataBase.lightZ);
-        Points[2] = new Vector3(-0.2f,-0.2f,DataBase.lightZ);
-        Points[3] = new Vector3(-0.2f,0.2f,DataBase.lightZ);
-        Points[4] = new Vector3(0f,0f,DataBase.lightZ);
 		emits = new GameObject[numberOfLights];
-		emits[0] = light1;
-		emits[1] = light2;
-		emits[2] = light3;
-		emits[3] = light4;
-		emits[4] = light5;
+		for(int n = 0; n < numberOfLights; n++)
+		{
+			GameObject light = new GameObject();
+			light.AddComponent<LightScript>();
+			light.GetComponent<LightScript>().color = DataBase.getLightColor(numberOfLights);
+			light.transform.parent = transform;
+			emits[n] = light;
+		}
+		emits[0].transform.localPosition = new Vector2(0f,0f);
+		for(int n = 1; n < numberOfLights; n++)
+		{
+			float angle = 360f*((float)n/(numberOfLights-1));
+			Vector2 point = convertToPoint(angle)*radius;
+			emits[n].transform.localPosition = point;
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		mouseScroll();
-		placeLights();
 		updateLightVariables();
 	}
 
-	Vector3[] toWorldPoint()
+	Vector2 convertToPoint(float a)
 	{
-		Vector3[] worldP = new Vector3[numberOfLights];
-		for(int n = 0; n < numberOfLights; n ++)
-		{
-			worldP[n] = new Vector3(Points[n].x + transform.position.x,
-			                        Points[n].y + transform.position.y,
-			                        DataBase.lightZ);
-		}
-		return worldP;
-	}
-
-	void placeLights()
-	{
-		Vector3[] worldP = toWorldPoint();
-		for(int n = 0; n < numberOfLights; n ++)
-		{
-			emits[n].gameObject.transform.localPosition = worldP[n];
-		}
+		return new Vector2 (Mathf.Cos (Mathf.Deg2Rad * a), Mathf.Sin (Mathf.Deg2Rad * a));
 	}
 
 	void updateLightVariables()
 	{
-		for(int n = 0; n < numberOfLights-1; n ++)
+		for(int n = 0; n < numberOfLights; n ++)
 		{
-			emits[n].GetComponent<LightScript>().angle = transform.rotation.eulerAngles.z;
+			float percentage = (float)(n+1f)/(numberOfLights);
 			emits[n].GetComponent<LightScript>().coneWidth = coneWidth;
-			emits[n].GetComponent<LightScript>().coneDistance = coneDistance;
+			emits[n].GetComponent<LightScript>().coneDistance = coneDistance/1.7f + percentage*(coneDistance-coneDistance/1.7f);
 		}
-		emits[numberOfLights-1].GetComponent<LightScript>().coneWidth = 359f;
-		emits[numberOfLights-1].GetComponent<LightScript>().coneDistance = 1f;
 	}
 
 	void mouseScroll()

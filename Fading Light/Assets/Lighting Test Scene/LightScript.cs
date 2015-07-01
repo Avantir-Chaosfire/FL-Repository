@@ -5,149 +5,42 @@ using System.Collections.Generic;
 
 public class LightScript : MonoBehaviour {
 
-
 	private List<RaycastHit2D> rayHits;
 	private RaycastHit2D[] rayHitsArray;
 
 	public float coneWidth;
 	public float coneDistance;
-	public float angle;
+	public Color color;
 
-	private MeshRenderer renderer;
+	private MeshRenderer mRenderer;
 	private MeshFilter filter;
 
 	// Use this for initialization
 	void Start () {
+
 		transform.position = new Vector3 (transform.position.x,transform.position.y,-1f);
 		rayHits = new List<RaycastHit2D> ();
 
-		renderer = gameObject.AddComponent<MeshRenderer>();
+		mRenderer = gameObject.AddComponent<MeshRenderer>();
 		filter = gameObject.AddComponent<MeshFilter>();
-		renderer.material.shader = Shader.Find ("Custom/LightShader");
-		renderer.material.color = DataBase.lightColor;
-		renderer.sortingLayerName = "Light";
+		mRenderer.material.shader = Shader.Find ("Custom/LightShader");
+		mRenderer.material.color = color;
+		mRenderer.sortingLayerName = "Light";
 
 		coneWidth = 359f;
 		coneDistance = 4f;
-		angle = 0f;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		castRays(transform.position, angle, coneDistance);
-		drawLight(rayHitsArray);
+
+		castRays2(transform.position, coneDistance);
+
+		drawLight2(rayHitsArray);
+
+		//debugLines ();
 	}
 
-	void drawLight(RaycastHit2D[] rayHitsArray)
-	{
-		if(coneWidth >= 359f)
-		{
-			Vector2[] thePoints = new Vector2[rayHitsArray.Length];
-			for(int n = 0; n < rayHitsArray.Length; n ++)
-			{
-				thePoints[n] = rayHitsArray[n].point;
-			}
-			toLocalSpace(thePoints);
-			filter.mesh = createMesh(thePoints);
-		}
-		else
-		{
-			Vector2[] thePoints = new Vector2[rayHitsArray.Length+1];
-			thePoints[0] = transform.position;
-			for(int n = 1; n < rayHitsArray.Length+1; n ++)
-			{
-				thePoints[n] = rayHitsArray[n-1].point;
-			}
-			toLocalSpace(thePoints);
-			filter.mesh = createMesh(thePoints);
-			//set rotation to 0 to fix
-		}
-	}
-
-	//angles goes COUNTER-CLOCKWISE from start to end, angles should be normalized before using
-	void castRays(Vector2 origin, float angle, float distance)
-	{
-		//get all polygonCollider2d corners on screen (stored in DataBase)
-		//draw a ray toward the angles and all corners withing the angles
-		rayHits.Clear();//clear previous frame's rayHits
-
-		float angleStart = normalizeAngle (angle - coneWidth/2);
-		float angleEnd = normalizeAngle (angle + coneWidth/2);
-
-		Vector2 directionStart = convertToPoint(angleStart);
-		Vector2 directionEnd = convertToPoint(angleEnd);
-
-		RaycastHit2D a = Physics2D.Raycast(origin, directionStart, distance, (1 << LayerMask.NameToLayer("SolidWallLayer")));
-		RaycastHit2D b = Physics2D.Raycast(origin, directionEnd, distance, (1 << LayerMask.NameToLayer("SolidWallLayer")));
-		a.centroid = origin;
-		b.centroid = origin;
-		if(!a.collider) a.point = (directionStart.normalized*distance) + origin;
-		if(!b.collider) b.point = (directionEnd.normalized*distance) + origin;
-		rayHits.Add(a);
-		rayHits.Add(b);
-
-		float smoothness = 7f;//draw a ray every 5 degree
-		float newAngle = angleStart+smoothness;
-		float amount = coneWidth / smoothness;
-		while(newAngle < angleStart+amount*smoothness)
-		{
-			Vector2 hurdur = convertToPoint(newAngle);
-			
-			RaycastHit2D derp = Physics2D.Raycast(origin, hurdur, distance, (1 << LayerMask.NameToLayer("SolidWallLayer")));
-			derp.centroid = origin;
-			if(!derp.collider) derp.point = (hurdur.normalized*distance) + origin;
-			rayHits.Add(derp);
-
-			newAngle += smoothness;
-		}
-
-		for(int n = 0; n < DataBase.corners.Count; n ++)
-		{
-			for(int i = 0; i < DataBase.corners[n].points.Length; i ++)
-			{
-				Vector2 temp = toWorldSpace(DataBase.corners[n], i);
-				Vector2 direction = new Vector2(temp.x - origin.x, temp.y - origin.y);
-				float dirAngle = convertToAngle(direction);
-
-				//if the corner is withing the light cone, cast a ray toward it
-				if(isBetween(angleStart, angleEnd, dirAngle))
-				{
-					//cast 2 rays offset by 0.0001f so the ray will keep going if it hits a corner
-					Vector2 offSet1 = convertToPoint(dirAngle + 0.01f);
-					Vector2 offSet2 = convertToPoint(dirAngle - 0.01f);
-					RaycastHit2D c = Physics2D.Raycast(origin, offSet1, distance, (1 << LayerMask.NameToLayer("SolidWallLayer")));
-					RaycastHit2D d = Physics2D.Raycast(origin, offSet2, distance, (1 << LayerMask.NameToLayer("SolidWallLayer")));
-					c.centroid = origin;
-					d.centroid = origin;
-
-					//if both miss then this thing is out of range
-					if(!c.collider && !d.collider)
-					{
-						//dont bother doing anything
-					}
-					//if both offsets hit, just use one ray(reduce triangles)
-					else if(c.collider == d.collider)
-					{
-						RaycastHit2D e = Physics2D.Raycast(origin, direction, distance, (1 << LayerMask.NameToLayer("SolidWallLayer")));
-						e.centroid = origin;
-						rayHits.Add (e);
-					}
-					else//only one of the offsets must have missed(cant both miss unless out of range)
-					{
-						if(!c.collider) 
-							c.point = offSet1.normalized*distance + origin;
-						if(!d.collider)
-							d.point = offSet2.normalized*distance + origin;
-
-						rayHits.Add (c);
-						rayHits.Add (d);
-					}
-				}
-			}
-		}
-		rayHitsArray = rayHits.ToArray();
-		sortRayHits(rayHitsArray, angleEnd+0.01f);
-	}
 
 	///////////////////////CALCULATION FUNCTIONS/////////////////////////////
 	/////////////////////////////////////////////////////////////////////////
@@ -183,19 +76,12 @@ public class LightScript : MonoBehaviour {
 			return (a > start && a <= barriar) || (a >= barriar2 && a < end);
 	}
 	
-	//returns the world points equvalent of the local point in polygoncollider2d
-	Vector2 toWorldSpace(PolygonCollider2D c, int index)
-	{
-		Vector2 temp = c.transform.position;
-		return temp + c.points[index];
-	}
-	
 	//converts an array or world points to local point centered around origin
 	void toLocalSpace(Vector2[] worldPoints)
 	{
 		for(int n = 0; n < worldPoints.Length; n++)
 		{
-			worldPoints[n] = worldPoints[n] - (Vector2)transform.position;
+			worldPoints[n] = transform.InverseTransformPoint(worldPoints[n]);
 		}
 	}
 	
@@ -282,12 +168,163 @@ public class LightScript : MonoBehaviour {
 		{
 			Vector2 direction = new Vector2 (rayHitsArray[n].point.x - rayHitsArray[n].centroid.x,
 			                                 rayHitsArray[n].point.y - rayHitsArray[n].centroid.y);
-			if(n == 0 || n == rayHitsArray.Length-1)
-				Debug.DrawRay(rayHitsArray[n].centroid, direction, Color.yellow);
-			else
+
 				Debug.DrawRay(rayHitsArray[n].centroid, direction, Color.white);
 		}
 	}
 	/////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////
+	/// EXPERIMENTAL//////////////////////
+
+	//COUNTER CLOCKWISE
+	float distanceBetween(float start, float end)
+	{
+		float barriar = 360f;
+		float ans = 0f;
+		if(start < end)
+		{
+			ans = end - start;
+		}
+		else
+		{
+			ans = (barriar - start) + end;
+		}
+		return ans;
+	}
+
+	void drawLight2(RaycastHit2D[] rayHitsArray)
+	{
+		List<Vector2> thePoints = new List<Vector2> ();
+		if(coneWidth < 350f)//not a circle
+		{
+			thePoints.Add(transform.position);
+		}
+		thePoints.Add(rayHitsArray[0].point);//assumes array will not be empty
+		for(int n = 0; n < rayHitsArray.Length-1; n ++)
+		{
+			if((!rayHitsArray[n].collider || !rayHitsArray[n+1].collider)||(rayHitsArray[n].collider != rayHitsArray[n+1].collider))
+			{
+				float smooth = 5f;
+				float total = distanceBetween(rayHitsArray[n+1].fraction, rayHitsArray[n].fraction);
+				int nw = Mathf.FloorToInt(total/smooth);
+				float newSmooth = total/nw;
+
+				for(int count = 1; count < nw; count ++)
+				{
+					float ang = rayHitsArray[n].fraction-count*newSmooth;
+					thePoints.Add(new Vector2(transform.position.x + coneDistance*Mathf.Cos(Mathf.Deg2Rad*ang),
+					                          transform.position.y + coneDistance*Mathf.Sin(Mathf.Deg2Rad*ang)));
+				}
+			}
+			if(rayHitsArray[n].point != rayHitsArray[n+1].point)
+			thePoints.Add(rayHitsArray[n+1].point);
+		}
+		Vector2[] p = thePoints.ToArray();
+		toLocalSpace(p);
+		filter.mesh = createMesh(p);
+	}
+	
+	//angles goes COUNTER-CLOCKWISE from start to end, angles should be normalized before using
+	void castRays2(Vector2 origin, float distance)
+	{
+		float angle = transform.rotation.eulerAngles.z;
+		//transform.TransformPoint() 
+
+		//get all polygonCollider2d corners on screen (stored in DataBase)
+		//draw a ray toward the angles and all corners withing the angles
+		rayHits.Clear();//clear previous frame's rayHits
+		
+		float angleStart = normalizeAngle (angle - coneWidth/2);
+		float angleEnd = normalizeAngle (angle + coneWidth/2);
+		
+		Vector2 directionStart = convertToPoint(angleStart);
+		Vector2 directionEnd = convertToPoint(angleEnd);
+		
+		RaycastHit2D a = Physics2D.Raycast(origin, directionStart, distance, (1 << LayerMask.NameToLayer("SolidWallLayer")));
+		RaycastHit2D b = Physics2D.Raycast(origin, directionEnd, distance, (1 << LayerMask.NameToLayer("SolidWallLayer")));
+		RaycastHit2D mid = Physics2D.Raycast(origin, convertToPoint(angle), distance, (1 << LayerMask.NameToLayer("SolidWallLayer")));
+		a.centroid = origin;
+		b.centroid = origin;
+		mid.centroid = origin;
+		if(!a.collider) a.point = (directionStart.normalized*distance) + origin;
+		if(!b.collider) b.point = (directionEnd.normalized*distance) + origin;
+		if(!mid.collider) mid.point = (convertToPoint(angle).normalized*distance) + origin;
+		a.fraction = angleStart;
+		b.fraction = angleEnd;
+		mid.fraction = angle;//USE FRACTION TO STORE ANGLE
+		a.distance = distance;
+		b.distance = distance;
+		mid.distance = distance;
+		a.normal = directionStart.normalized;
+		b.normal = directionEnd.normalized;
+		mid.normal = convertToPoint(angle).normalized;
+
+		if(a.collider) a.point = a.collider.gameObject.GetComponent<SolidWallScript>().getRayExit(a);
+		if(b.collider) b.point = b.collider.gameObject.GetComponent<SolidWallScript>().getRayExit(b);
+		if(mid.collider) mid.point = mid.collider.gameObject.GetComponent<SolidWallScript>().getRayExit(mid);
+
+		rayHits.Add(a);
+		rayHits.Add(b);
+		rayHits.Add(mid);
+
+
+		for(int n = 0; n < DataBase.corners.Count; n ++)
+		{
+			for(int i = 0; i < DataBase.corners[n].Length; i ++)
+			{
+				Vector2 direction = new Vector2(DataBase.corners[n][i].x - origin.x, DataBase.corners[n][i].y - origin.y);
+				float dirAngle = convertToAngle(direction);
+				
+				//if the corner is withing the light cone, cast a ray toward it
+				if(isBetween(angleStart, angleEnd, dirAngle))
+				{
+					//cast 2 rays offset by 0.0001f so the ray will keep going if it hits a corner
+					Vector2 offSet1 = convertToPoint(dirAngle + 0.02f);
+					Vector2 offSet2 = convertToPoint(dirAngle - 0.02f);
+					RaycastHit2D c = Physics2D.Raycast(origin, offSet1.normalized, distance, (1 << LayerMask.NameToLayer("SolidWallLayer")));
+					RaycastHit2D d = Physics2D.Raycast(origin, offSet2.normalized, distance, (1 << LayerMask.NameToLayer("SolidWallLayer")));
+					c.centroid = origin;
+					d.centroid = origin;
+					c.fraction = normalizeAngle(dirAngle + 0.02f);
+					d.fraction = normalizeAngle(dirAngle - 0.02f);
+					c.distance = distance;
+					d.distance = distance;
+					c.normal = offSet1.normalized;
+					d.normal = offSet2.normalized;
+					
+					
+					//if both miss then this thing is out of range
+					if(!c.collider && !d.collider)
+					{
+						//dont bother doing anything
+					}
+					//if both offsets hit, just use one ray(reduce triangles)
+					else if(c.collider == d.collider)
+					{
+						RaycastHit2D e = Physics2D.Raycast(origin, direction.normalized, distance, (1 << LayerMask.NameToLayer("SolidWallLayer")));
+						e.centroid = origin;
+						e.fraction = dirAngle;
+						e.distance = distance;
+						e.normal = direction.normalized;
+						if(!e.collider) e.point = direction.normalized*distance + origin;
+						if(e.collider) e.point = e.collider.gameObject.GetComponent<SolidWallScript>().getRayExit(e);
+						rayHits.Add (e);
+					}
+					else
+					{
+						if(!c.collider) c.point = offSet1.normalized*distance + origin;
+						if(!d.collider)d.point = offSet2.normalized*distance + origin;
+
+						if(c.collider) c.point = c.collider.gameObject.GetComponent<SolidWallScript>().getRayExit(c);
+						if(d.collider) d.point = d.collider.gameObject.GetComponent<SolidWallScript>().getRayExit(d);
+						
+						rayHits.Add (c);
+						rayHits.Add (d);
+					}
+				}
+			}
+		}
+		rayHitsArray = rayHits.ToArray();
+		sortRayHits(rayHitsArray, angleEnd+0.01f);
+	}
 }

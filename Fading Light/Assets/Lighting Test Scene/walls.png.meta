@@ -1,11 +1,12 @@
 fileFormatVersion: 2
-guid: ba9cc5dffe3a5034d84f580f7e36b08d
-timeCreated: 1433625548
+guid: 2412ff9c7058a534ab88431a8935f07f
+timeCreated: 1435426456
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Branch
-    21300002: Base
+    21300000: walls_0
+    21300002: walls_1
+    21300004: walls_2
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -51,25 +52,35 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: Branch
+    - name: walls_0
       rect:
         serializedVersion: 2
-        x: 52
-        y: 251
-        width: 324
-        height: 261
+        x: 21
+        y: 79
+        width: 51
+        height: 134
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Base
+    - name: walls_1
       rect:
         serializedVersion: 2
-        x: 125
-        y: 3
-        width: 288
-        height: 239
+        x: 107
+        y: 78
+        width: 51
+        height: 134
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: walls_2
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 76
+        width: 51
+        height: 134
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 
